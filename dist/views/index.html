@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form enctype="multipart/form-data" method="post" name="fileinfo" id="fileinfo">
+    <p>
+      <label>File to stash:
+        <input type="file" id="file" required multiple />
+      </label>
+    </p>
+    <p>
+      <input type="submit" id="send" value="Stash the file!" />
+    </p>
+    <input type="button" value="Download" id="download">
+  </form>
+  <script>
+    const form = document.querySelector("#fileinfo");
+    const download = document.querySelector("#download")
+
+    download.addEventListener('click', async (event) => {
+      fetch('http://localhost:3030/api/v1/files/1703807540473-Data-Structures-and-Algorithms-in-Java-6th-Edition.pdf', {
+        method: "GET",
+        headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NThhYzU1MmNhN2M3OTg0YTQyOGU1YmMiLCJzY29wZSI6ImFkbWluIiwiaWF0IjoxNzAzNzc0OTExfQ.rNwO9oCyo9P-WIs406unMzfZ3A9VzFVIeCgZaAeVUqs" },
+      })
+      .then(data => data.blob())
+      .then(blob => {
+        var file = window.URL.createObjectURL(blob);
+        var a = document.createElement('a')
+        a.href = file
+        a.download = blob.type
+        document.body.appendChild(a)
+        a.click();
+        a.remove()
+      })
+    })
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault()
+      const files = document.querySelector("#file")
+      const formData = new FormData(form);
+
+      for(let i = 0; i<files.files.length; i++){
+        formData.append('files', files.files[i])
+      }
+
+      const response = await fetch("http://localhost:3030/api/v1/files/upload/", {
+        method: "POST",
+        headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NThhYzU1MmNhN2M3OTg0YTQyOGU1YmMiLCJzY29wZSI6ImFkbWluIiwiaWF0IjoxNzAzNzc0OTExfQ.rNwO9oCyo9P-WIs406unMzfZ3A9VzFVIeCgZaAeVUqs" },
+        body: formData,
+      });
+    });
+
+  </script>
+</body>
+
+</html>
