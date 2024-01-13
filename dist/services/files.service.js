@@ -45,7 +45,7 @@ class FilesService {
     }
     find(userId, cf) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (0, directory_tree_1.default)(cf);
+            return (0, directory_tree_1.default)(yield cf);
         });
     }
     update(oldName, body, userId) {

@@ -21,7 +21,7 @@ const files = new files_service_1.default();
 class PictureService {
     createFolder(user) {
         return __awaiter(this, void 0, void 0, function* () {
-            const path = (0, path_1.join)(__dirname, '../../filesystem', user, 'pictures');
+            const path = (0, path_1.join)(__dirname, '../../filesystem', user, '/pictures');
             yield promises_1.default.mkdir(path, { recursive: true });
             return path;
         });

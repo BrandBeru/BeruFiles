@@ -12,7 +12,7 @@ const files = new FilesService()
 
 class PictureService{
   async createFolder(user: string){
-    const path = join(__dirname, '../../filesystem',user, 'pictures')
+    const path = join(__dirname, '../../filesystem',user, '/pictures')
     await fs.mkdir(path, {recursive:true})
     return path
   }

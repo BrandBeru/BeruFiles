@@ -22,15 +22,38 @@
       <input type="submit" id="send" value="Stash the file!" />
     </p>
     <input type="button" value="Download" id="download">
+    <input type="button" value="List Files" id="list">
   </form>
+  <table id="filesTable">
+    <tr>
+      <th>id</th>
+      <th>name</th>
+    </tr>
+  </table>
   <script>
     const form = document.querySelector("#fileinfo");
     const download = document.querySelector("#download")
+    const list = document.querySelector("#list")
     const token = document.querySelector("#token")
+    const filesTable = document.querySelector("#filesTable")
+
+    const getData = async () => {
+      let values = []
+      const data = await fetch('http://localhost:3030/api/v1/files', {
+        method: "GET",
+        headers: { "Authorization": "Bearer "+token.value },
+      }).then(data =>data.json())
+      .then(data => values = `${data.children.map((value, index) => `<tr><td>${index}</td><td>${value.name}</td></tr>`).join("")}`)
+      filesTable.innerHTML += values
+    }
+
+    list.addEventListener('click', async (event) => {
+      getData()
+    })
 
     download.addEventListener('click', async (event) => {
       const fileId = document.querySelector("#fileId")
-      fetch('http://localhost:3030/api/v1/pictures/'+fileId, {
+      fetch('http://localhost:3030/api/v1/pictures/'+fileId.value, {
         method: "GET",
         headers: { "Authorization": "Bearer "+token.value },
       })

@@ -1,7 +1,6 @@
 import directoryTree from 'directory-tree';
 import { createCipheriv, createDecipheriv, scryptSync } from 'node:crypto';
 import fs from 'node:fs/promises'
-import path from 'node:path';
 
 import { join } from 'path';
 import config from '../config';
@@ -28,7 +27,7 @@ class FilesService{
     writeFileSync(`${await cf}/${new Date().getTime()}-${name}`, this.encrypt(buffer))
   }
   async find(userId: string, cf:any){
-    return directoryTree(cf)
+    return directoryTree(await cf)
   }
   async update(oldName: string, body: any, userId: string){
     const newName = body.name
