@@ -9,6 +9,10 @@
 
 <body>
   <form enctype="multipart/form-data" method="post" name="fileinfo" id="fileinfo">
+    <label for="token">Token</label>
+    <input type="text" name="token" id="token" placeholder="Token:"><br>
+    <label for="fileId">File</label>
+    <input type="text" name="fileId" id="fileId" placeholder="File:">
     <p>
       <label>File to stash:
         <input type="file" id="file" required multiple />
@@ -22,11 +26,13 @@
   <script>
     const form = document.querySelector("#fileinfo");
     const download = document.querySelector("#download")
+    const token = document.querySelector("#token")
 
     download.addEventListener('click', async (event) => {
-      fetch('http://localhost:3030/api/v1/files/1703807540473-Data-Structures-and-Algorithms-in-Java-6th-Edition.pdf', {
+      const fileId = document.querySelector("#fileId")
+      fetch('http://localhost:3030/api/v1/pictures/'+fileId, {
         method: "GET",
-        headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NThhYzU1MmNhN2M3OTg0YTQyOGU1YmMiLCJzY29wZSI6ImFkbWluIiwiaWF0IjoxNzAzNzc0OTExfQ.rNwO9oCyo9P-WIs406unMzfZ3A9VzFVIeCgZaAeVUqs" },
+        headers: { "Authorization": "Bearer "+token.value },
       })
       .then(data => data.blob())
       .then(blob => {
@@ -42,16 +48,14 @@
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault()
-      const files = document.querySelector("#file")
+      const file = document.querySelector("#file")
       const formData = new FormData(form);
 
-      for(let i = 0; i<files.files.length; i++){
-        formData.append('files', files.files[i])
-      }
+      formData.append('file', file.files[0])
 
-      const response = await fetch("http://localhost:3030/api/v1/files/upload/", {
+      const response = await fetch("http://localhost:3030/api/v1/pictures/upload/", {
         method: "POST",
-        headers: { "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NThhYzU1MmNhN2M3OTg0YTQyOGU1YmMiLCJzY29wZSI6ImFkbWluIiwiaWF0IjoxNzAzNzc0OTExfQ.rNwO9oCyo9P-WIs406unMzfZ3A9VzFVIeCgZaAeVUqs" },
+        headers: { "Authorization": "Bearer "+token.value },
         body: formData,
       });
     });

@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const multer_1 = __importDefault(require("multer"));
 const passport_1 = __importDefault(require("passport"));
+const picture_service_1 = __importDefault(require("../services/picture.service"));
 const validator_handler_1 = __importDefault(require("../middlewares/validator.handler"));
 const files_schema_1 = require("../schemas/files.schema");
-const multer_1 = __importDefault(require("multer"));
 const file_type_1 = __importDefault(require("file-type"));
-const picture_service_1 = __importDefault(require("../services/picture.service"));
 const router = (0, express_1.Router)();
 const service = new picture_service_1.default();
 const upload = (0, multer_1.default)();
@@ -63,8 +63,8 @@ router.delete("/:id", passport_1.default.authenticate('jwt', { session: true }),
     try {
         const { id } = req.params;
         const userId = req.user.sub;
-        yield service.remove(userId, id);
-        res.json({ message: "Deleted Successfully!" });
+        const message = yield service.remove(userId, id);
+        res.json({ message: message });
     }
     catch (err) {
         next(err);

@@ -1,10 +1,12 @@
 import express, { Express } from "express";
 
-import filesRouter from '../routes/files'
+import pictureRouter from '../routes/picture'
+import fileRouter from '../routes/files'
 import config from "../config";
 
 export default function routerApi(app: Express) {
   const router = express.Router();
   app.use(`/${config.project}/${config.version}`, router);
-  router.use("/files", filesRouter);
+  router.use("/pictures", pictureRouter);
+  router.use("/files", fileRouter);
 }

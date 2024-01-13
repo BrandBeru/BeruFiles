@@ -12,10 +12,6 @@ const routes_1 = __importDefault(require("./routes"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-app.use(error_handler_1.logError);
-app.use(error_handler_1.ormErrorHandler);
-app.use(error_handler_1.boomErrorHandler);
-app.use(error_handler_1.errorHandler);
 const secret = config_1.default.jwt_secret;
 const days = 1000 * 60 * 60 * 24 * 15;
 const sessionMiddleware = (0, express_session_1.default)({
@@ -43,6 +39,10 @@ app.get("/", (req, res, next) => {
 require('./utils/auth');
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
+app.use(error_handler_1.logError);
+app.use(error_handler_1.ormErrorHandler);
+app.use(error_handler_1.boomErrorHandler);
+app.use(error_handler_1.errorHandler);
 const port = config_1.default.port;
 app.listen(port, () => {
     console.log('📂[Files server]: listening on port ' + port + '!');

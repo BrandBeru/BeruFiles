@@ -13,28 +13,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const directory_tree_1 = __importDefault(require("directory-tree"));
-const multer_1 = __importDefault(require("multer"));
+const node_crypto_1 = require("node:crypto");
 const promises_1 = __importDefault(require("node:fs/promises"));
-const node_path_1 = __importDefault(require("node:path"));
 const path_1 = require("path");
+const config_1 = __importDefault(require("../config"));
+const node_fs_1 = require("node:fs");
 class FilesService {
-    create() {
-        const storage = multer_1.default.diskStorage({
-            destination: (req, file, cb) => __awaiter(this, void 0, void 0, function* () {
-                const user = req.user.sub;
-                const path = (0, path_1.join)(__dirname, '../../filesystem', user);
-                yield promises_1.default.mkdir(path, { recursive: true });
-                cb(null, path);
-            }),
-            filename: (req, file, cb) => {
-                cb(null, Date.now() + '-' + file.originalname);
-            }
-        });
-        return (0, multer_1.default)({ storage });
+    encrypt(buffer) {
+        const iv = Buffer.alloc(16, 0);
+        const key = (0, node_crypto_1.scryptSync)(config_1.default.encode_password, 'salt', 24);
+        const cipher = (0, node_crypto_1.createCipheriv)(config_1.default.encode_algorithm, key, iv);
+        return Buffer.concat([cipher.update(buffer), cipher.final()]);
     }
-    find(userId) {
+    read(path) {
+        const file = (0, node_fs_1.readFileSync)(path);
+        return file;
+    }
+    decrypt(name, user, cf) {
         return __awaiter(this, void 0, void 0, function* () {
-            return (0, directory_tree_1.default)(node_path_1.default.join(__dirname, `../../filesystem/${userId}`));
+            const iv = Buffer.alloc(16, 0);
+            const key = (0, node_crypto_1.scryptSync)(config_1.default.encode_password, 'salt', 24);
+            const decipher = (0, node_crypto_1.createDecipheriv)(config_1.default.encode_algorithm, key, iv);
+            const buffer = this.read(`${yield cf}/${name}`);
+            return Buffer.concat([decipher.update(buffer), decipher.final()]);
+        });
+    }
+    save(buffer, user, name, cf) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, node_fs_1.writeFileSync)(`${yield cf}/${new Date().getTime()}-${name}`, this.encrypt(buffer));
+        });
+    }
+    find(userId, cf) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (0, directory_tree_1.default)(cf);
         });
     }
     update(oldName, body, userId) {

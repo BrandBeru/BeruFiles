@@ -13,6 +13,9 @@ const config = {
     api_key: process.env.API_KEY,
     api_secret: process.env.API_SECRET,
     jwt_secret: process.env.JWT_SECRET,
-    jwt_expiration: process.env.JWT_EXPIRATION
+    jwt_expiration: process.env.JWT_EXPIRATION,
+    encode_password: process.env.ENCODE_PASSWORD,
+    encode_algorithm: process.env.ENCODE_ALGORITHM,
+    tinify_key: process.env.TINIFY_KEY,
 };
 exports.default = config;

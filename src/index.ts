@@ -8,10 +8,6 @@ import path from 'path';
 import cors from 'cors'
 
 const app = express();
-app.use(logError);
-app.use(ormErrorHandler);
-app.use(boomErrorHandler);
-app.use(errorHandler);
 
 const secret: any = config.jwt_secret;
 const days = 1000*60*60*24*15
@@ -42,6 +38,11 @@ routerApi(app);
 require('./utils/auth');
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(logError);
+app.use(ormErrorHandler);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 const port = config.port;
 app.listen(port, () => {

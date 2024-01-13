@@ -1,16 +1,13 @@
 import { Router } from "express";
-import FilesService from "../services/files.service";
+import multer from "multer";
 import passport from "passport";
-import { join } from "path";
+import PictureService from "../services/picture.service";
 import validatorHandler from "../middlewares/validator.handler";
 import { updateFile } from "../schemas/files.schema";
-import multer from "multer";
-
 import fileType from 'file-type'
-import PictureService from "../services/picture.service";
 
-const router = Router();
-const service = new PictureService();
+const router = Router()
+const service = new PictureService()
 
 const upload = multer()
 
@@ -52,8 +49,8 @@ router.delete("/:id", passport.authenticate('jwt', { session: true }), async (re
   try{
     const {id} = req.params
     const userId = req.user.sub
-    await service.remove(userId, id);
-    res.json({message: "Deleted Successfully!"})
+    const message = await service.remove(userId, id);
+    res.json({message: message})
   }catch(err){
     next(err)
   }
@@ -71,4 +68,4 @@ router.get("/:id",passport.authenticate('jwt', { session: true }), async (req:an
   }
 })
 
-export default router;
+export default router
