@@ -39,7 +39,7 @@
 
     const getData = async () => {
       let values = []
-      const data = await fetch('http://localhost:3030/api/v1/files', {
+      const data = await fetch('https://api.pnovastudios.xyz/files', {
         method: "GET",
         headers: { "Authorization": "Bearer "+token.value },
       }).then(data =>data.json())
@@ -53,7 +53,7 @@
 
     download.addEventListener('click', async (event) => {
       const fileId = document.querySelector("#fileId")
-      fetch('http://localhost:3030/api/v1/pictures/'+fileId.value, {
+      fetch('https://api.pnovastudios.xyz/pictures/'+fileId.value, {
         method: "GET",
         headers: { "Authorization": "Bearer "+token.value },
       })
@@ -76,7 +76,7 @@
 
       formData.append('file', file.files[0])
 
-      const response = await fetch("http://localhost:3030/api/v1/pictures/upload/", {
+      const response = await fetch("https://api.pnovastudios.xyz/pictures/upload/", {
         method: "POST",
         headers: { "Authorization": "Bearer "+token.value },
         body: formData,
