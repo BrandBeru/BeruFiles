@@ -20,6 +20,7 @@
     </p>
     <p>
       <input type="submit" id="send" value="Stash the file!" />
+      <input type="button" id="sendUser" value="Stash the file as user" />
     </p>
     <input type="button" value="Download" id="download">
     <input type="button" value="List Files" id="list">
@@ -30,16 +31,18 @@
       <th>name</th>
     </tr>
   </table>
+  <img src="/api/v1/users/1706211456930-pictureProfile.png" alt="">
   <script>
     const form = document.querySelector("#fileinfo");
     const download = document.querySelector("#download")
     const list = document.querySelector("#list")
+    const sendUser = document.querySelector("#sendUser")
     const token = document.querySelector("#token")
     const filesTable = document.querySelector("#filesTable")
 
     const getData = async () => {
       let values = []
-      const data = await fetch('https://api.pnovastudios.xyz/files', {
+      const data = await fetch('/api/v1/files', {
         method: "GET",
         headers: { "Authorization": "Bearer "+token.value },
       }).then(data =>data.json())
@@ -48,12 +51,13 @@
     }
 
     list.addEventListener('click', async (event) => {
+      filesTable.innerHTML = ''
       getData()
     })
 
     download.addEventListener('click', async (event) => {
       const fileId = document.querySelector("#fileId")
-      fetch('https://api.pnovastudios.xyz/pictures/'+fileId.value, {
+      fetch('/api/v1/pictures/'+fileId.value, {
         method: "GET",
         headers: { "Authorization": "Bearer "+token.value },
       })
@@ -69,6 +73,18 @@
       })
     })
 
+    sendUser.addEventListener('click', async (event) => {
+      const file = document.querySelector("#file")
+      const formData = new FormData(form);
+
+      formData.append('file', file.files[0])
+      const response = await fetch("/api/v1/users/upload/", {
+        method: "POST",
+        headers: { "Authorization": "Bearer "+token.value },
+        body: formData,
+      });
+    })
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault()
       const file = document.querySelector("#file")
@@ -76,7 +92,7 @@
 
       formData.append('file', file.files[0])
 
-      const response = await fetch("https://api.pnovastudios.xyz/pictures/upload/", {
+      const response = await fetch("/api/v1/pictures/upload/", {
         method: "POST",
         headers: { "Authorization": "Bearer "+token.value },
         body: formData,
