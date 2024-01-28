@@ -20,17 +20,20 @@ const file_type_1 = __importDefault(require("file-type"));
 const router = (0, express_1.Router)();
 const service = new picture_service_1.default();
 const upload = (0, multer_1.default)();
-router.post('/upload', passport_1.default.authenticate('jwt', { session: true }), upload.single('file'), (req, res, next) => {
+router.post('/upload', passport_1.default.authenticate('jwt', { session: true }), upload.single('file'), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uplodaded' });
         }
-        service.save(req.file.buffer, 'users', req.file.originalname);
+        const rta = yield service.save(req.file.buffer, 'users', req.file.originalname);
+        res.json({
+            path: `https://berufiles-jcscma6scq-rj.a.run.app/api/v1/profiles/${rta}`
+        });
     }
     catch (error) {
         next(error);
     }
-});
+}));
 router.get('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
@@ -39,6 +42,7 @@ router.get('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         res.send(Buffer.from(file));
     }
     catch (error) {
+        next(error);
     }
 }));
 exports.default = router;

@@ -40,7 +40,9 @@ class FilesService {
     }
     save(buffer, user, name, cf) {
         return __awaiter(this, void 0, void 0, function* () {
-            (0, node_fs_1.writeFileSync)(`${yield cf}/${new Date().getTime()}-${name}`, this.encrypt(buffer));
+            const path = `${new Date().getTime()}-${name}`;
+            (0, node_fs_1.writeFileSync)(`${yield cf}/${path}`, this.encrypt(buffer));
+            return path;
         });
     }
     find(userId, cf) {

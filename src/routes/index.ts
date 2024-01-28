@@ -10,5 +10,5 @@ export default function routerApi(app: Express) {
   app.use(`/${config.project}/${config.version}`, router);
   router.use("/pictures", pictureRouter);
   router.use("/files", fileRouter);
-  router.use('/users', userRouter)
+  router.use('/profiles', userRouter)
 }

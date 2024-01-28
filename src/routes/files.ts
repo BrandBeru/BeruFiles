@@ -14,15 +14,15 @@ const service = new PictureService();
 
 const upload = multer()
 
-router.post("/upload", passport.authenticate('jwt', { session: true }), upload.single('file'), (req:any, res, next) => {
+router.post("/upload", passport.authenticate('jwt', { session: true }), upload.single('file'), async (req:any, res, next) => {
   try {
     if(!req.file) {
       return res.status(400).json({error: 'No file uplodaded'})
     }
-    service.save( req.file.buffer, req.user.sub, req.file.originalname)
+    const rta = await service.save( req.file.buffer, req.user.sub, req.file.originalname)
     res.json({
       message: 'File uploaded successfully',
-      file: req.file.filename
+      path: rta
     })
   } catch (error) {
     next(error);

@@ -24,7 +24,10 @@ class FilesService{
     return Buffer.concat([decipher.update(buffer), decipher.final()])
   }
   async save(buffer: Buffer, user: string, name: string, cf:any){
-    writeFileSync(`${await cf}/${new Date().getTime()}-${name}`, this.encrypt(buffer))
+    const path = `${new Date().getTime()}-${name}`
+    writeFileSync(`${await cf}/${path}`, this.encrypt(buffer))
+
+    return path;
   }
   async find(userId: string, cf:any){
     return directoryTree(await cf)

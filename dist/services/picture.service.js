@@ -36,7 +36,8 @@ class PictureService {
             tinify_1.default.key = config_1.default.tinify_key;
             const source = tinify_1.default.fromBuffer(buffer);
             const optimizedBuffer = yield source.toBuffer();
-            yield files.save(Buffer.from(optimizedBuffer), user, name, this.createFolder(user));
+            const path = yield files.save(Buffer.from(optimizedBuffer), user, name, this.createFolder(user));
+            return path;
         });
     }
     getAll(userId) {

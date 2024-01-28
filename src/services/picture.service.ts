@@ -23,7 +23,8 @@ class PictureService{
     tinify.key = config.tinify_key
     const source = tinify.fromBuffer(buffer)
     const optimizedBuffer = await source.toBuffer()
-    await files.save(Buffer.from(optimizedBuffer), user, name, this.createFolder(user))
+    const path = await files.save(Buffer.from(optimizedBuffer), user, name, this.createFolder(user))
+    return path
   }
   async getAll(userId: string){
     return await files.find(userId, this.createFolder(userId))

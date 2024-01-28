@@ -13,6 +13,6 @@ function routerApi(app) {
     app.use(`/${config_1.default.project}/${config_1.default.version}`, router);
     router.use("/pictures", picture_1.default);
     router.use("/files", files_1.default);
-    router.use('/users', user_1.default);
+    router.use('/profiles', user_1.default);
 }
 exports.default = routerApi;
