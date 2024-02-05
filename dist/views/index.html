@@ -10,20 +10,24 @@
 <body>
   <form enctype="multipart/form-data" method="post" name="fileinfo" id="fileinfo">
     <label for="token">Token</label>
-    <input type="text" name="token" id="token" placeholder="Token:"><br>
-    <label for="fileId">File</label>
-    <input type="text" name="fileId" id="fileId" placeholder="File:">
+    <input type="text" name="token" id="token" placeholder="Token:" required><br>
+    <label for="Id del archivo">File</label>
+    <input type="text" name="fileId" id="fileId" placeholder="Archivo:">
     <p>
       <label>File to stash:
-        <input type="file" id="file" required multiple />
+        <input type="file" id="file" required />
       </label>
     </p>
     <p>
-      <input type="submit" id="send" value="Stash the file!" />
-      <input type="button" id="sendUser" value="Stash the file as user" />
+      <div style="display:flex; flex-direction: column; gap: 10px;">
+        <input type="submit" id="send" value="Subir el archivo como privado" />
+        <input type="button" id="sendUser" value="Subir el archivo como publico" />
+      </div>
     </p>
-    <input type="button" value="Download" id="download">
-    <input type="button" value="List Files" id="list">
+    <div style="display:flex; flex-direction: column; gap: 10px;">
+      <input type="button" value="Listar archivos" id="list">
+      <input type="button" value="Descargar" id="download">
+    </div>
   </form>
   <table id="filesTable">
     <tr>
@@ -83,6 +87,8 @@
         headers: { "Authorization": "Bearer "+token.value },
         body: formData,
       });
+      console.log(response)
+      alert(response)
     })
 
     form.addEventListener("submit", async (event) => {
