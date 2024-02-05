@@ -9,7 +9,7 @@ const router = Router()
 const service = new PictureService();
 const upload = multer()
 
-router.post('/upload', passport.authenticate('jwt', {session: true}), upload.single('file'), async (req, res, next) => {
+router.post('/upload', upload.single('file'), async (req, res, next) => {
   try{
     if(!req.file) {
       return res.status(400).json({error: 'No file uplodaded'})
